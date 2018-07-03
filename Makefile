@@ -1,10 +1,5 @@
-install: install-deps install-flow-typed
-
-install-deps:
+install: 
 	npm install
-
-install-flow-typed:
-	npm run flow-typed install
 
 dev:
 	npm run dev
