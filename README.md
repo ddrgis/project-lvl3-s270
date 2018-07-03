@@ -1,14 +1,9 @@
-##
-[![Hexlet Ltd. logo](https://raw.githubusercontent.com/Hexlet/hexletguides.github.io/master/images/hexlet_logo128.png)](https://ru.hexlet.io/pages/about?utm_source=github&utm_medium=link&utm_campaign=nodejs-package)
+# RSS-Reader
 
-This repository is created and maintained by the team and the community of Hexlet, an educational project. [Read more about Hexlet (in Russian)](https://ru.hexlet.io/pages/about?utm_source=github&utm_medium=link&utm_campaign=nodejs-package).
-##
-
-# nodejs-package
-
-[![Code Climate](https://codeclimate.com/github/hexlet-boilerplates/javascript-package/badges/gpa.svg)](https://codeclimate.com/github/hexlet-boilerplates/javascript-package)
-[![Issue Count](https://codeclimate.com/github/hexlet-boilerplates/javascript-package/badges/issue_count.svg)](https://codeclimate.com/github/hexlet-boilerplates/javascript-package)
-[![Build Status](https://travis-ci.org/hexlet-boilerplates/nodejs-package.svg?branch=master)](https://travis-ci.org/hexlet-boilerplates/nodejs-package)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b21d9c665ddfd6c7b482/maintainability)](https://codeclimate.com/github/ddrgis/project-lvl3-s258/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/b21d9c665ddfd6c7b482/test_coverage)](https://codeclimate.com/github/ddrgis/project-lvl3-s258/test_coverage)
+[![Build Status](https://travis-ci.org/ddrgis/project-lvl3-s258.svg?branch=master.svg?branch=master)]
+(https://travis-ci.org/ddrgis/project-lvl3-s258.svg?branch=master)
 
 ## Setup
 

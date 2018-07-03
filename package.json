@@ -1,29 +1,19 @@
 {
   "name": "hxlt-front3",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
-  "main": "dist/index.js",
-  "bin": {
-    "hexlet": "dist/bin/hexlet.js"
-  },
-  "engines": {
-    "node": ">=8"
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "start": "webpack --config webpack.config.js",
-    "webpack": "webpack-serve --port 1337",
+    "dev": "NODE_ENV=development webpack-serve --port 1337",
     "test": "jest",
     "babel-node": "babel-node",
     "eslint": "eslint",
-    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
-    "prepublishOnly": "npm run build"
+    "babel-build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hexlet-boilerplates/nodejs-package.git"
+    "url": "git+https://github.com/ddrgis/project-lvl3-s270.git"
   },
   "author": "Nikita Sementcov",
   "license": "ISC",
