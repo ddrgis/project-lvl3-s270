@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "description": "",
   "scripts": {
-    "start": "webpack --config webpack.config.js",
+    "webpack": "webpack --config webpack.config.js",
     "dev": "NODE_ENV=development webpack-serve --port 1337",
     "test": "jest",
     "babel-node": "babel-node",
@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "bootstrap": "^4.1.1",
-    "jquery": "^3.3.1",
     "popper.js": "^1.14.3"
   },
   "devDependencies": {
@@ -36,6 +35,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^0.28.11",
     "debug": "^3.1.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
