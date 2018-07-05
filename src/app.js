@@ -15,6 +15,7 @@ export default () => {
     }
 
     addFeed(rssURLInput[0].value);
+    rssURLInput[0].value = '';
   });
 
   rssURLInput.on('keypress', (e) => {

@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
-    "dev": "webpack-serve --port 1337",
+    "dev": "npm run webpack && webpack-serve --port 1337",
     "test": "jest",
     "babel-node": "babel-node",
     "eslint": "eslint",
