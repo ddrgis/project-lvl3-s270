@@ -3,6 +3,7 @@ import {
   isValidURL,
   addFeed,
 } from './feeds';
+import parseRSS from './parsers';
 
 export default () => {
   const submitBtn = $('#btn-submit');
@@ -10,12 +11,15 @@ export default () => {
 
   submitBtn.on('click', (e) => {
     e.preventDefault();
-    if (!isValidURL(rssURLInput[0].value)) {
+    const url = rssURLInput[0].value;
+
+    if (!isValidURL(url)) {
       return;
     }
 
     addFeed(rssURLInput[0].value);
     rssURLInput[0].value = '';
+    parseRSS(url);
   });
 
   rssURLInput.on('keypress', (e) => {
