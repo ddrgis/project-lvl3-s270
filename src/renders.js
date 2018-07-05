@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 export const renderFeedList = (feeds) => {
   const container = $('#rss-list');
-  const content = feeds.map(feed => `<p>${feed}</p>`);
+  const content = `<dl>${feeds.map(feed => `<dt>${feed.title}</dt><dd>${feed.description}</dd>`)}</dl>`;
   container.html(content);
 };
 

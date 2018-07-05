@@ -1,30 +1,27 @@
-import axios, { get } from 'axios';
+import $ from 'jquery';
+import { addFeed } from './feeds';
 
 const parseRSS = (url) => {
-  get(`https://crossorigin.me/${url}`)
-    .then((response) => {
-      console.log('First:');
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log('First:');
-      console.log(error);
-    });
+  $.getJSON(`http://anyorigin.com/go/?url=${url}&callback=?`)
+    .done((response) => {
+      const parser = new DOMParser(); // eslint-disable-line
+      const doc = parser.parseFromString(response.contents, 'application/xml');
+      const jDoc = $(doc);
+      const title = jDoc.find('channel>title');
+      const titleText = title ? title.text() : undefined;
 
-  const instance = axios.create({
-    baseURL: 'https://crossorigin.me/',
-    timeout: 31000,
-    Origin: 'https://crossorigin.me/',
-  });
+      const description = jDoc.find('channel>description');
+      const descriptionText = description ? description.text() : undefined;
 
-  instance.get(url)
-    .then((response) => {
-      console.log('Second:');
-      console.log(response);
+      addFeed({
+        title: titleText,
+        description: descriptionText,
+        url,
+      });
     })
-    .catch((error) => {
-      console.log('Second:');
-      console.log(error);
+    .fail((jqxhr, textStatus, error) => {
+      const err = `${textStatus}, ${error}`;
+      console.log(`Request Failed: ${err}`);
     });
 };
 
