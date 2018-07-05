@@ -9,7 +9,7 @@
     "babel-node": "babel-node",
     "eslint": "eslint",
     "babel-build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
-    "deploy": "npm run webpack && surge",
+    "deploy": "npm run webpack && surge --domain closed-song.surge.sh",
     "prepublishOnly": "npm run webpack"
   },
   "repository": {
@@ -24,7 +24,8 @@
   "dependencies": {
     "bootstrap": "^4.1.1",
     "jquery": "^3.3.1",
-    "popper.js": "^1.14.3"
+    "popper.js": "^1.14.3",
+    "validator": "^10.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^8.6.4",

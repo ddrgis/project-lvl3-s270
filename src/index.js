@@ -1,6 +1,5 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import app from './app';
 
-import half from './half';
-
-export default half;
+app();

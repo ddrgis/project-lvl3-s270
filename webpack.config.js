@@ -18,6 +18,10 @@ module.exports = {
       },
     ],
   },
+  devtool: 'eval-source-map',
+  output: {
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'RSS Reader',
