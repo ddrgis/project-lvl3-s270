@@ -9,6 +9,7 @@ const state = {
 };
 
 export const getFeeds = () => state.feeds;
+
 export const addFeed = ({
   title,
   description,
@@ -29,4 +30,11 @@ export const isValidURL = (url) => {
     return false;
   }
   return validator.isURL(url);
+};
+
+export const getArticles = () => state.articles;
+
+export const addArticles = (articles) => {
+  state.articles = [...state.articles, ...articles];
+  renders.renderArticlesList(getArticles()); // TODO: add sorting
 };

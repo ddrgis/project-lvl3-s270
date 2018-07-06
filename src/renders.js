@@ -6,4 +6,8 @@ export const renderFeedList = (feeds) => {
   container.html(content);
 };
 
-export default renderFeedList;
+export const renderArticlesList = (articles) => {
+  const container = $('#articles-list');
+  const content = `<dl>${articles.map(article => `<dt>${article.title}</dt><dd>${article.link}</dd>`)}</dl>`;
+  container.html(content);
+};

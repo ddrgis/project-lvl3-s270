@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import { addFeed } from './state';
+import {
+  addFeed,
+  addArticles,
+} from './state';
 
 const parseRSS = (url) => {
   $.getJSON(`http://anyorigin.com/go/?url=${url}&callback=?`)
@@ -18,6 +21,19 @@ const parseRSS = (url) => {
         description: descriptionText,
         url,
       });
+
+      const items = jDoc.find('item');
+      const articles = items.map((index) => {
+        const jItem = $(items[index]);
+        const articleTitle = jItem.find('title');
+        const link = jItem.find('link');
+        return {
+          title: articleTitle ? articleTitle.text() : undefined,
+          link: link ? link.text() : undefined,
+        };
+      });
+
+      addArticles(articles);
     })
     .fail((jqxhr, textStatus, error) => {
       const err = `${textStatus}, ${error}`;
@@ -26,3 +42,4 @@ const parseRSS = (url) => {
 };
 
 export default parseRSS;
+

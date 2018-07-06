@@ -3,10 +3,10 @@ import { isValidURL } from './state';
 import parseRSS from './parsers';
 
 export default () => {
-  const submitBtn = $('#btn-submit');
+  const rssSubmitButton = $('#btn-submit');
   const rssURLInput = $('#input-rss-url');
 
-  submitBtn.on('click', (e) => {
+  rssSubmitButton.on('click', (e) => {
     e.preventDefault();
     const url = rssURLInput[0].value;
 
