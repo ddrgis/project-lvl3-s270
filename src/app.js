@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { isValidURL } from './feeds';
+import { isValidURL } from './state';
 import parseRSS from './parsers';
 
 export default () => {

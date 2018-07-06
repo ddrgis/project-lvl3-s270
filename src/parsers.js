@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { addFeed } from './feeds';
+import { addFeed } from './state';
 
 const parseRSS = (url) => {
   $.getJSON(`http://anyorigin.com/go/?url=${url}&callback=?`)
