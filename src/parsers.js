@@ -1,27 +1,31 @@
 import axios from 'axios';
 import normalize from 'normalize-url';
 import $ from 'jquery';
-import { addFeed, addArticles } from './state';
+import { addFeed, addArticles, toggleRSSLoading } from './state';
 
 const parseRSS = url => {
-  axios
+  toggleRSSLoading(); // TODO: extract to init method
+  return axios
     .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`, {
       Accept: 'text/javascript, */*'
     })
     .then(response => {
       const parser = new DOMParser(); // eslint-disable-line
-      const doc = parser.parseFromString(response.data, 'application/xml');
-      const jDoc = $(doc);
-      const title = jDoc.find('channel>title');
+      const dom = parser.parseFromString(response.data, 'application/xml');
+      const rss = $(dom).find('rss');
+      if (rss.length === 0) {
+        throw new Error(`There is no RSS feed at ${url}`);
+      }
+      const title = rss.find('channel>title');
       const titleText = title ? title.text() : undefined;
-      const description = jDoc.find('channel>description');
+      const description = rss.find('channel>description');
       const descriptionText = description ? description.text() : undefined;
       addFeed({
         title: titleText,
         description: descriptionText,
         url
       });
-      const items = jDoc.find('item');
+      const items = rss.find('item');
       const articles = items.map(index => {
         const jItem = $(items[index]);
         const articleTitle = jItem.find('title');
@@ -33,8 +37,11 @@ const parseRSS = url => {
       });
       addArticles(articles);
     })
+    .then(() => toggleRSSLoading())
     .catch(err => {
       console.log(err);
+      toggleRSSLoading();
+      throw err;
     });
 };
 

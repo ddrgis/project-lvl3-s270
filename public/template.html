@@ -16,9 +16,11 @@
             <div class="jumbotron col-6">
                 <h1 class="display-4">RSS Reader</h1>
                 <form class="form-inline">
-                    <input type="text" id="input-rss-url" class="form-control col-10 mb-2 mr-sm-2" placeholder="URL">
+                    <input type="text" id="input-rss-url" class="form-control col-6 mb-2 mr-sm-2" placeholder="URL">
                     <button type="submit" id="btn-submit" class="btn btn-primary mb-2">Read</button>
+                    <div id="rss-input-loader">Loading...</div>
                 </form>
+                <div id="rss-input-error" class="col-12 text-danger" />
             </div>
         </div>
         <div class="row">

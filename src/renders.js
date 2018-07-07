@@ -18,3 +18,17 @@ export const renderArticlesList = articles => {
   const content = `<div>${articlesHtml}</div>`;
   container.html(content);
 };
+
+export const renderValidationError = error => {
+  const container = $('#rss-input-error');
+  container.html(error);
+};
+
+export const renderRSSInputLoader = isLoading => {
+  const loader = $('#rss-input-loader');
+  if (isLoading) {
+    loader.show();
+  } else {
+    loader.hide();
+  }
+};
