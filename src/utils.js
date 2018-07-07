@@ -1,9 +1,8 @@
 import normalize from 'normalize-url';
 
-export const normilizeUrl = (url) => {
+export const normilizeUrl = url => {
   const normalizeOptions = {
-    normalizeHttps: true,
-
+    normalizeHttps: true
   };
   return normalize(url, normalizeOptions);
 };

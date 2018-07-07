@@ -5,26 +5,25 @@ import { normilizeUrl } from './utils';
 const state = {
   feeds: [],
   articles: [],
-  ui: {},
+  ui: {}
 };
 
 export const getFeeds = () => state.feeds;
 
-export const addFeed = ({
-  title,
-  description,
-  url,
-}) => {
-  state.feeds = [...state.feeds, {
-    title,
-    description,
-    url: normilizeUrl(url),
-  }];
+export const addFeed = ({ title, description, url }) => {
+  state.feeds = [
+    ...state.feeds,
+    {
+      title,
+      description,
+      url: normilizeUrl(url)
+    }
+  ];
 
   renders.renderFeedList(getFeeds());
 };
 
-export const isValidURL = (url) => {
+export const isValidURL = url => {
   const normalizedUrl = normilizeUrl(url);
   if (state.feeds.map(feed => feed.url).indexOf(normalizedUrl) > -1) {
     return false;
@@ -34,7 +33,7 @@ export const isValidURL = (url) => {
 
 export const getArticles = () => state.articles;
 
-export const addArticles = (articles) => {
+export const addArticles = articles => {
   state.articles = [...state.articles, ...articles];
   renders.renderArticlesList(getArticles()); // TODO: add sorting
 };

@@ -6,7 +6,7 @@ export default () => {
   const rssSubmitButton = $('#btn-submit');
   const rssURLInput = $('#input-rss-url');
 
-  rssSubmitButton.on('click', (e) => {
+  rssSubmitButton.on('click', e => {
     e.preventDefault();
     const url = rssURLInput[0].value;
 
@@ -18,7 +18,7 @@ export default () => {
     parseRSS(url);
   });
 
-  rssURLInput.on('keypress', (e) => {
+  rssURLInput.on('keypress', e => {
     if (!isValidURL(e.target.value)) {
       rssURLInput.addClass('border border-danger');
     } else {
