@@ -5,7 +5,9 @@ import { addFeed, addArticles } from './state';
 
 const parseRSS = url => {
   axios
-    .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`)
+    .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`, {
+      Accept: 'text/javascript, */*'
+    })
     .then(response => {
       const parser = new DOMParser(); // eslint-disable-line
       const doc = parser.parseFromString(response.data, 'application/xml');
