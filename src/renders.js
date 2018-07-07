@@ -10,8 +10,11 @@ export const renderFeedList = feeds => {
 
 export const renderArticlesList = articles => {
   const container = $('#articles-list');
-  const content = `<dl>${articles.map(
-    a => `<dt>${a.title}</dt><dd>${a.link}</dd>`
-  )}</dl>`;
+  const articlesHtml = articles
+    .map(
+      a => `<div><a href="${a.link}" title="${a.title}">${a.title}</a></div>`
+    )
+    .join('');
+  const content = `<div>${articlesHtml}</div>`;
   container.html(content);
 };
