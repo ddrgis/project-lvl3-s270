@@ -27,8 +27,5 @@ export const parseRSS = (rss, url) => {
   };
 };
 
-export const updateFeeds = () => {
-  console.log('updateFeeds');
-  // const { feeds } = getState();
-  // feeds.forEach(feed => parseRSS(feed.url));
-};
+export default parseRSS;
+

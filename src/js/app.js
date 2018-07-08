@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import _ from 'lodash';
 import axios from 'axios';
 import normalize from 'normalize-url';
 import {
@@ -10,9 +11,10 @@ import {
   setUpdateTimer,
   addFeed,
   addArticles,
+  getArticles,
   showRSSContent
 } from './state';
-import { parseRSS, updateFeeds } from './parsers';
+import { parseRSS } from './parsers';
 
 const handleError = err => {
   console.log(err);
@@ -25,9 +27,7 @@ const handleError = err => {
 
 export const requestRSS = url =>
   axios
-    .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`, {
-      Accept: 'text/javascript, */*'
-    })
+    .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`)
     .then(response => {
       const parser = new DOMParser();
       const dom = parser.parseFromString(response.data, 'application/xml');
@@ -41,6 +41,31 @@ export const requestRSS = url =>
       console.log(err);
       throw err;
     });
+
+const updateFeeds = () => {
+  const state = getState();
+  Promise.all(state.feeds.map(feed => requestRSS(feed.url)))
+    .then(response => {
+      Promise.all(response.map(rss => parseRSS(rss)))
+        .then(feeds => {
+          const stateArticles = getArticles();
+          const articlesByFeed = feeds.map(feed => feed.articles.toArray());
+          const allArticles = _.flatten(articlesByFeed);
+          const newArticles = allArticles.filter(
+            a => !stateArticles.some(sa => sa.title === a.title)
+          );
+          addArticles(newArticles);
+        })
+        .catch(err => {
+          console.error(err);
+          throw err;
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      throw err;
+    });
+};
 
 export default ({ rssUpdateInterval }) => {
   toggleRSSLoading(); // TODO: extract to init method

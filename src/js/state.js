@@ -48,7 +48,7 @@ export const getArticles = () => state.articles;
 
 export const addArticles = articles => {
   state.articles = [...state.articles, ...articles];
-  renders.renderArticlesList(getArticles());
+  renders.renderArticlesList(getArticles()); // TODO: rerender only new articles!
 };
 
 export const setValidationError = error => {
