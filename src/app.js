@@ -1,6 +1,18 @@
 import $ from 'jquery';
-import { isValidURL, setValidationError, toggleRSSLoading, hideRSSContent } from './state';
-import parseRSS from './parsers';
+import axios from 'axios';
+import normalize from 'normalize-url';
+import {
+  getState,
+  isValidURL,
+  setValidationError,
+  toggleRSSLoading,
+  hideRSSContent,
+  setUpdateTimer,
+  addFeed,
+  addArticles,
+  showRSSContent
+} from './state';
+import { parseRSS, updateFeeds } from './parsers';
 
 const handleError = err => {
   console.log(err);
@@ -11,7 +23,26 @@ const handleError = err => {
   }
 };
 
-export default () => {
+export const requestRSS = url =>
+  axios
+    .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`, {
+      Accept: 'text/javascript, */*'
+    })
+    .then(response => {
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(response.data, 'application/xml');
+      const rss = $(dom).find('rss');
+      if (rss.length === 0) {
+        throw new Error(`There is no RSS feed at ${url}`);
+      }
+      return rss;
+    })
+    .catch(err => {
+      console.log(err);
+      throw err;
+    });
+
+export default ({ rssUpdateInterval }) => {
   toggleRSSLoading(); // TODO: extract to init method
   hideRSSContent(); // TODO: extract to init method
   const rssSubmitButton = $('#btn-submit');
@@ -27,7 +58,25 @@ export default () => {
     }
 
     rssURLInput[0].value = '';
-    parseRSS(url).catch(err => handleError(err));
+    toggleRSSLoading();
+    requestRSS(url)
+      .then(response => parseRSS(response, url))
+      .then(({ feed, articles }) => {
+        addFeed(feed);
+        addArticles(articles);
+        showRSSContent();
+      })
+      .then(() => {
+        if (!getState().app.isUpdateTimerSetted) {
+          setInterval(() => updateFeeds(), rssUpdateInterval);
+          setUpdateTimer();
+        }
+        toggleRSSLoading();
+      })
+      .catch(err => {
+        toggleRSSLoading();
+        handleError(err);
+      });
   });
 
   rssURLInput.on('keypress', e => {

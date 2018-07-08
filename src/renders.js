@@ -22,7 +22,6 @@ export const renderRSSModal = (title, description) => {
 
 export const renderArticlesList = articles => {
   const container = $('#articles-list');
-
   const articlesItems = articles.map(a => {
     const span = document.createElement('span');
     span.setAttribute('data-toggle', 'modal');

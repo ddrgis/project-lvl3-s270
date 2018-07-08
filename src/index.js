@@ -4,5 +4,6 @@ import app from './app';
 
 import styles from '../public/styles.css'; // eslint-disable-line
 
-app();
+const rssUpdateInterval = 5000;
 
+app({ rssUpdateInterval });

@@ -5,12 +5,17 @@ import { normilizeUrl } from './utils';
 const state = {
   feeds: [],
   articles: [],
+  app: {
+    isUpdateTimerSetted: false
+  },
   ui: {
     validationError: '',
     isRSSLoading: true,
     isHiddenRSSContent: true
   }
 };
+
+export const getState = () => state;
 
 export const getFeeds = () => state.feeds;
 
@@ -43,7 +48,7 @@ export const getArticles = () => state.articles;
 
 export const addArticles = articles => {
   state.articles = [...state.articles, ...articles];
-  renders.renderArticlesList(getArticles()); // TODO: add sorting
+  renders.renderArticlesList(getArticles());
 };
 
 export const setValidationError = error => {
@@ -64,4 +69,8 @@ export const hideRSSContent = () => {
 export const showRSSContent = () => {
   state.ui.isHiddenRSSContent = false;
   renders.showRSSContent();
+};
+
+export const setUpdateTimer = () => {
+  state.app.isUpdateTimerSetted = true;
 };
