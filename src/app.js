@@ -1,7 +1,6 @@
 import $ from 'jquery';
-import { isValidURL, setValidationError } from './state';
+import { isValidURL, setValidationError, toggleRSSLoading, hideRSSContent } from './state';
 import parseRSS from './parsers';
-import { renderRSSInputLoader } from './renders';
 
 const handleError = err => {
   console.log(err);
@@ -13,7 +12,8 @@ const handleError = err => {
 };
 
 export default () => {
-  renderRSSInputLoader(false);
+  toggleRSSLoading(); // TODO: extract to init method
+  hideRSSContent(); // TODO: extract to init method
   const rssSubmitButton = $('#btn-submit');
   const rssURLInput = $('#input-rss-url');
 
@@ -22,6 +22,7 @@ export default () => {
     const url = rssURLInput[0].value;
 
     if (!isValidURL(url)) {
+      setValidationError('This URL is already parsed'); // TODO: call new validate method instead of isValidURL. There are another errors could be here!
       return;
     }
 

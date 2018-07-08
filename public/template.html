@@ -12,20 +12,26 @@
 
 <body>
     <div class="container-fluid">
-        <div class="row offset-3">
-            <div class="jumbotron col-6">
-                <h1 class="display-4">RSS Reader</h1>
+        <div class="row">
+            <div class="jumbotron col-sm-12">
+                <h1 class="display-3">RSS Reader</h1>
                 <form class="form-inline">
-                    <input type="text" id="input-rss-url" class="form-control col-6 mb-2 mr-sm-2" placeholder="URL">
-                    <button type="submit" id="btn-submit" class="btn btn-primary mb-2">Read</button>
-                    <div id="rss-input-loader">Loading...</div>
+                    <input type="text" id="input-rss-url" class="form-control col-sm-4 mb-2 mr-sm-2" placeholder="URL">
+                    <button type="submit" id="btn-submit" class="col-sm-auto btn btn-primary mb-2">Read</button>
+                    <div id="rss-input-loader" class="col-sm-auto">Loading...</div>
                 </form>
-                <div id="rss-input-error" class="col-12 text-danger" />
+                <div id="rss-input-error" class="col-sm-12 text-danger"></div>
             </div>
         </div>
-        <div class="row">
-            <div id="rss-list" class="col-6"></div>
-            <div id="articles-list" class="col-6"></div>
+        <div id="rss-container" class="row pl-3">
+            <div class="col-sm-4">
+                <h4>Feeds:</h2>
+                <div id="rss-list"></div>
+            </div>
+            <div class="col-sm-auto">
+                <h4>Articles:</h2>
+                <div id="articles-list"></div>
+            </div>
         </div>
     </div>
 </body>

@@ -7,7 +7,8 @@ const state = {
   articles: [],
   ui: {
     validationError: '',
-    isRSSLoading: false
+    isRSSLoading: true,
+    isHiddenRSSContent: true
   }
 };
 
@@ -52,5 +53,15 @@ export const setValidationError = error => {
 
 export const toggleRSSLoading = () => {
   state.ui.isRSSLoading = !state.ui.isRSSLoading;
-  renders.renderRSSInputLoader(state.ui.isRSSLoading);
+  renders.toggleRSSInputLoader(state.ui.isRSSLoading);
+};
+
+export const hideRSSContent = () => {
+  state.ui.isHiddenRSSContent = true;
+  renders.hideRSSContent();
+};
+
+export const showRSSContent = () => {
+  state.ui.isHiddenRSSContent = false;
+  renders.showRSSContent();
 };

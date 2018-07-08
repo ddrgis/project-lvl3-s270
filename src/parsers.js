@@ -1,10 +1,10 @@
 import axios from 'axios';
 import normalize from 'normalize-url';
 import $ from 'jquery';
-import { addFeed, addArticles, toggleRSSLoading } from './state';
+import { addFeed, addArticles, toggleRSSLoading, showRSSContent } from './state';
 
 const parseRSS = url => {
-  toggleRSSLoading(); // TODO: extract to init method
+  toggleRSSLoading();
   return axios
     .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`, {
       Accept: 'text/javascript, */*'
@@ -36,6 +36,7 @@ const parseRSS = url => {
         };
       });
       addArticles(articles);
+      showRSSContent();
     })
     .then(() => toggleRSSLoading())
     .catch(err => {

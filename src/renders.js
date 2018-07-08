@@ -2,19 +2,26 @@ import $ from 'jquery';
 
 export const renderFeedList = feeds => {
   const container = $('#rss-list');
-  const content = `<dl>${feeds.map(
-    feed => `<dt>${feed.title}</dt><dd>${feed.description}</dd>`
-  )}</dl>`;
+  const feedItems = feeds.map(
+    feed => `<div class="list-group-item">
+      <h5>${feed.title}</h5>
+      <p>${feed.description}</p>
+    </div>`
+  );
+  const content = `<ul class="list-group">${feedItems}</ul>`;
   container.html(content);
 };
 
 export const renderArticlesList = articles => {
   const container = $('#articles-list');
-  const articlesHtml = articles
+  const articlesItems = articles
     .map(
-      a => `<div><a href="${a.link}" title="${a.title}">${a.title}</a></div>`
+      a => `<li class="list-group-item">
+              <a href="${a.link}" title="${a.title}">${a.title}</a>
+            </li>`
     )
     .join('');
+  const articlesHtml = `<ul class="list-group">${articlesItems}</ul>`;
   const content = `<div>${articlesHtml}</div>`;
   container.html(content);
 };
@@ -24,11 +31,21 @@ export const renderValidationError = error => {
   container.html(error);
 };
 
-export const renderRSSInputLoader = isLoading => {
+export const toggleRSSInputLoader = isLoading => {
   const loader = $('#rss-input-loader');
   if (isLoading) {
     loader.show();
   } else {
     loader.hide();
   }
+};
+
+export const hideRSSContent = () => {
+  const container = $('#rss-container');
+  container.hide();
+};
+
+export const showRSSContent = () => {
+  const container = $('#rss-container');
+  container.show();
 };
