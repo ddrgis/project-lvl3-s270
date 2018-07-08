@@ -7,12 +7,11 @@ import {
   isValidURL,
   setValidationError,
   toggleRSSLoading,
-  hideRSSContent,
   setUpdateTimer,
   addFeed,
   addArticles,
   getArticles,
-  showRSSContent
+  showContentContainer
 } from './state';
 import { parseRSS } from './parsers';
 
@@ -67,29 +66,26 @@ const updateFeeds = () => {
     });
 };
 
-export default ({ rssUpdateInterval }) => {
-  toggleRSSLoading(); // TODO: extract to init method
-  hideRSSContent(); // TODO: extract to init method
+const startApplication = ({ rssUpdateInterval }) => {
   const rssSubmitButton = $('#btn-submit');
   const rssURLInput = $('#input-rss-url');
 
   rssSubmitButton.on('click', e => {
     e.preventDefault();
-    const url = rssURLInput[0].value;
+    const url = rssURLInput.val();
 
     if (!isValidURL(url)) {
       setValidationError('This URL is already parsed'); // TODO: call new validate method instead of isValidURL. There are another errors could be here!
       return;
     }
 
-    rssURLInput[0].value = '';
     toggleRSSLoading();
     requestRSS(url)
       .then(response => parseRSS(response, url))
       .then(({ feed, articles }) => {
         addFeed(feed);
         addArticles(articles);
-        showRSSContent();
+        showContentContainer();
       })
       .then(() => {
         if (!getState().app.isUpdateTimerSetted) {
@@ -104,13 +100,16 @@ export default ({ rssUpdateInterval }) => {
       });
   });
 
-  rssURLInput.on('keypress', e => {
-    if (!isValidURL(e.target.value)) {
+  rssURLInput.on('keyup', e => {
+    if (e.target.value && !isValidURL(e.target.value)) {
       rssURLInput.addClass('border border-danger');
       setValidationError('Please enter valid URL');
-    } else {
-      rssURLInput.removeClass('border border-danger');
-      setValidationError('');
+      return;
     }
+
+    rssURLInput.removeClass('border border-danger');
+    setValidationError('');
   });
 };
+
+export default startApplication;

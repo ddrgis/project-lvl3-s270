@@ -12,29 +12,29 @@ export const renderFeedList = feeds => {
   container.html(content);
 };
 
-export const renderRSSModal = (title, description) => {
-  console.log('111');
-  console.log(title);
+export const renderRSSModal = ({ title, description, link }) => {
   $('#rss-modal-label').html(title);
-  $('#rss-modal-body').html(description);
+  $('#rss-modal-body')
+    .html(`<p class="lead">${description}</p>`)
+    .append(
+      `<br/><small class="text-muted"><a href='${link}' title='${title}'>Source: ${link}</a></small>`
+    );
   $('#rss-modal').modal('show');
 };
 
 export const renderArticlesList = articles => {
   const container = $('#articles-list');
   const articlesItems = articles.map(a => {
-    const span = document.createElement('span');
-    span.setAttribute('data-toggle', 'modal');
-    span.setAttribute('data-target', '#rss-modal');
-    span.innerHTML = a.title;
-    span.addEventListener(
-      'click',
-      renderRSSModal.bind(this, a.title, a.description)
-    );
+    const link = document.createElement('a');
+    link.setAttribute('href', '');
+    link.setAttribute('title', a.title);
+    link.setAttribute('data-toggle', 'modal');
+    link.setAttribute('data-target', '#rss-modal');
+    link.innerHTML = a.title;
+    link.addEventListener('click', renderRSSModal.bind(this, a));
     const li = document.createElement('li');
     li.setAttribute('class', 'list-group-item');
-    li.appendChild(span);
-
+    li.appendChild(link);
     return li;
   });
 
@@ -54,21 +54,20 @@ export const renderValidationError = error => {
   container.html(error);
 };
 
-export const toggleRSSInputLoader = isLoading => {
+export const toggleRSSLoading = isLoading => {
   const loader = $('#rss-input-loader');
   if (isLoading) {
-    loader.show();
+    loader.removeClass('invisible');
+    loader.addClass('visible');
   } else {
-    loader.hide();
+    loader.removeClass('visible');
+    loader.addClass('invisible');
   }
+  $('#btn-submit').prop('disabled', (index, value) => !value);
 };
 
-export const hideRSSContent = () => {
+export const showContentContainer = () => {
   const container = $('#rss-container');
-  container.hide();
-};
-
-export const showRSSContent = () => {
-  const container = $('#rss-container');
-  container.show();
+  container.removeClass('invisible');
+  container.addClass('visible');
 };

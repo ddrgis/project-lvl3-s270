@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <title>
         <%= htmlWebpackPlugin.options.title %>
     </title>
@@ -18,12 +19,12 @@
                 <form class="form-inline">
                     <input type="text" id="input-rss-url" class="form-control col-sm-4 mb-2 mr-sm-2" placeholder="URL">
                     <button type="submit" id="btn-submit" class="col-sm-auto btn btn-primary mb-2">Read</button>
-                    <div id="rss-input-loader" class="col-sm-auto">Loading...</div>
+                    <div id="rss-input-loader" class="col-sm-auto invisible">Loading...</div>
                 </form>
-                <div id="rss-input-error" class="col-sm-12 text-danger"></div>
+                <div id="rss-input-error" class="text-danger"></div>
             </div>
         </div>
-        <div id="rss-container" class="row pl-3">
+        <div id="rss-container" class="row pl-3 invisible">
             <div class="col-sm-4">
                 <h2 class="pb-2">Feeds:</h2>
                 <div id="rss-list"></div>

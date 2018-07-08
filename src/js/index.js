@@ -1,9 +1,9 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
-import app from './app';
+import startApplication from './app';
 
-import styles from '../styles.css'; // eslint-disable-line
+const settings = {
+  rssUpdateInterval: 5000,
+};
 
-const rssUpdateInterval = 5000;
-
-app({ rssUpdateInterval });
+startApplication(settings);
