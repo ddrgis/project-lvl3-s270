@@ -1,7 +1,12 @@
 import axios from 'axios';
 import normalize from 'normalize-url';
 import $ from 'jquery';
-import { addFeed, addArticles, toggleRSSLoading, showRSSContent } from './state';
+import {
+  addFeed,
+  addArticles,
+  toggleRSSLoading,
+  showRSSContent
+} from './state';
 
 const parseRSS = url => {
   toggleRSSLoading();
@@ -10,7 +15,7 @@ const parseRSS = url => {
       Accept: 'text/javascript, */*'
     })
     .then(response => {
-      const parser = new DOMParser(); // eslint-disable-line
+      const parser = new DOMParser();
       const dom = parser.parseFromString(response.data, 'application/xml');
       const rss = $(dom).find('rss');
       if (rss.length === 0) {
@@ -29,10 +34,14 @@ const parseRSS = url => {
       const articles = items.map(index => {
         const jItem = $(items[index]);
         const articleTitle = jItem.find('title');
-        const link = jItem.find('link');
+        const link = jItem.find('link'); // TODO: render it or delete if useless
+        const articleDescription = jItem.find('description');
         return {
           title: articleTitle ? articleTitle.text() : undefined,
-          link: link ? link.text() : undefined
+          link: link ? link.text() : undefined,
+          description: articleDescription
+            ? articleDescription.text()
+            : undefined
         };
       });
       addArticles(articles);

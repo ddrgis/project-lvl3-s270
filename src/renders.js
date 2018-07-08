@@ -12,18 +12,42 @@ export const renderFeedList = feeds => {
   container.html(content);
 };
 
+export const renderRSSModal = (title, description) => {
+  console.log('111');
+  console.log(title);
+  $('#rss-modal-label').html(title);
+  $('#rss-modal-body').html(description);
+  $('#rss-modal').modal('show');
+};
+
 export const renderArticlesList = articles => {
   const container = $('#articles-list');
-  const articlesItems = articles
-    .map(
-      a => `<li class="list-group-item">
-              <a href="${a.link}" title="${a.title}">${a.title}</a>
-            </li>`
-    )
-    .join('');
-  const articlesHtml = `<ul class="list-group">${articlesItems}</ul>`;
-  const content = `<div>${articlesHtml}</div>`;
-  container.html(content);
+
+  const articlesItems = articles.map(a => {
+    const span = document.createElement('span');
+    span.setAttribute('data-toggle', 'modal');
+    span.setAttribute('data-target', '#rss-modal');
+    span.innerHTML = a.title;
+    span.addEventListener(
+      'click',
+      renderRSSModal.bind(this, a.title, a.description)
+    );
+    const li = document.createElement('li');
+    li.setAttribute('class', 'list-group-item');
+    li.appendChild(span);
+
+    return li;
+  });
+
+  const ul = document.createElement('ul');
+  ul.setAttribute('class', 'list-group');
+  articlesItems.forEach(a => {
+    ul.appendChild(a);
+  });
+
+  const div = document.createElement('div');
+  div.appendChild(ul);
+  container.html(div);
 };
 
 export const renderValidationError = error => {
