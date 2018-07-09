@@ -5,7 +5,7 @@ import normalize from 'normalize-url';
 import {
   getState,
   setValidationError,
-  toggleRSSLoading,
+  setRSSLoading,
   addFeed,
   addArticles,
   isUpdateTimerSetted,
@@ -64,7 +64,7 @@ const handleButtonClick = rssURLInput => e => {
   if (!isValidURL) {
     return;
   }
-  toggleRSSLoading();
+  setRSSLoading(true);
   requestRSS(url)
     .then(response => parseRSS(response, url))
     .then(({ feed, articles }) => {
@@ -72,14 +72,14 @@ const handleButtonClick = rssURLInput => e => {
       addArticles(articles);
     })
     .then(() => {
-      toggleRSSLoading();
+      setRSSLoading(false);
       if (!isUpdateTimerSetted()) {
         setTimeout(updateFeeds, settings.rssUpdateTimeout);
         toggleUpdateTimer();
       }
     })
     .catch(err => {
-      toggleRSSLoading();
+      setRSSLoading(false);
       handleError(err);
     });
 };

@@ -44,8 +44,8 @@ export const resetValidationError = () => {
 };
 
 export const isRSSLoading = () => state.ui.isRSSLoading;
-export const toggleRSSLoading = () => {
-  state.ui.isRSSLoading = !state.ui.isRSSLoading;
+export const setRSSLoading = value => {
+  state.ui.isRSSLoading = value;
 };
 
 export const isUpdateTimerSetted = () => state.app.isUpdateTimerSetted;
