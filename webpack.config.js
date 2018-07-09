@@ -9,23 +9,27 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-        },
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
-    ],
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   },
   devtool: 'eval-source-map',
   output: {
-    devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'RSS Reader',
-      template: './src/template.html',
-    }),
-  ],
+      template: './src/template.html'
+    })
+  ]
 };
