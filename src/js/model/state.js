@@ -48,6 +48,11 @@ export const toggleRSSLoading = () => {
   state.ui.isRSSLoading = !state.ui.isRSSLoading;
 };
 
+export const isUpdateTimerSetted = () => state.app.isUpdateTimerSetted;
+export const toggleUpdateTimer = () => {
+  state.app.isUpdateTimerSetted = !state.app.isUpdateTimerSetted;
+};
+
 watch(state, 'feeds', () => renders.renderFeedList(getFeeds()));
 watch(state, 'feeds', () => {
   if (state.feeds.length > 0) {

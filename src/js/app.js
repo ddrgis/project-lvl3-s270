@@ -7,7 +7,9 @@ import {
   setValidationError,
   toggleRSSLoading,
   addFeed,
-  addArticles
+  addArticles,
+  isUpdateTimerSetted,
+  toggleUpdateTimer
 } from './model/state';
 import { parseDocument, parseRSS } from './parsers';
 import { validateURL } from './validator';
@@ -71,7 +73,10 @@ const handleButtonClick = rssURLInput => e => {
     })
     .then(() => {
       toggleRSSLoading();
-      updateFeeds(); // TODO: fix bug with it
+      if (!isUpdateTimerSetted()) {
+        setTimeout(updateFeeds, settings.rssUpdateTimeout);
+        toggleUpdateTimer();
+      }
     })
     .catch(err => {
       toggleRSSLoading();
