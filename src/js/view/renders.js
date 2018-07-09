@@ -28,6 +28,7 @@ const renderArticle = a => {
   link.setAttribute('title', a.title);
   link.setAttribute('data-toggle', 'modal');
   link.setAttribute('data-target', '#rss-modal');
+  link.setAttribute('class', 'articles-list-item');
   link.innerHTML = a.title;
   link.addEventListener('click', renderRSSModal.bind(this, a));
   const li = document.createElement('li');
@@ -37,29 +38,40 @@ const renderArticle = a => {
 };
 
 // TODO: sorting of articles
-export const renderArticlesList = articles => {
-  const container = document.getElementById('articles-list-container');
-  const articlesItems = articles.map(a => renderArticle(a));
-
-  const ul = document.createElement('ul');
-  ul.setAttribute('class', 'list-group');
-  ul.setAttribute('id', 'articles-list');
-
-  articlesItems.forEach(a => {
-    ul.appendChild(a);
+const appendArticlesToContainer = (articles, container) => {
+  const articlesItems = articles.map(article => renderArticle(article));
+  articlesItems.forEach(acticle => {
+    container.appendChild(acticle);
   });
-
-  const div = document.createElement('div');
-  div.appendChild(ul);
-  container.appendChild(div);
 };
 
-export const renderNewArticles = articles => {
-  const container = document.getElementById('articles-list');
-  const articlesItems = articles.map(a => renderArticle(a));
-  articlesItems.forEach(a => {
-    container.appendChild(a);
-  });
+const getNewArticles = (oldArticles, articles) => {
+  const oldArticlesArray = Array.from(oldArticles);
+  const newArticles = articles.filter(
+    article =>
+      !oldArticlesArray.some(oldArticle => oldArticle.title === article.title)
+  );
+  return newArticles;
+};
+
+export const renderArticlesListNew = articles => {
+  const container = document.getElementById('articles-list-container');
+  const renderedArticles = container.getElementsByClassName(
+    'articles-list-item'
+  );
+  if (renderedArticles.length === 0) {
+    const ul = document.createElement('ul');
+    ul.setAttribute('class', 'list-group');
+    ul.setAttribute('id', 'articles-list');
+    appendArticlesToContainer(articles, ul);
+    const div = document.createElement('div');
+    div.appendChild(ul);
+    container.appendChild(div);
+  } else {
+    const newArticles = getNewArticles(renderedArticles, articles);
+    const listContainer = document.getElementById('articles-list');
+    appendArticlesToContainer(newArticles, listContainer);
+  }
 };
 
 export const renderValidationError = error => {

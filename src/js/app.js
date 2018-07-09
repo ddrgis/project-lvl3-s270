@@ -7,8 +7,7 @@ import {
   setValidationError,
   toggleRSSLoading,
   addFeed,
-  addArticles,
-  getArticles
+  addArticles
 } from './model/state';
 import { parseDocument, parseRSS } from './parsers';
 import { validateURL } from './validator';
@@ -44,16 +43,12 @@ const updateFeeds = () => {
   Promise.all(state.feeds.map(feed => requestRSS(feed.url)))
     .then(response => {
       Promise.all(response.map(rss => parseRSS(rss))).then(feeds => {
-        const stateArticles = getArticles();
         const articlesByFeed = feeds.map(feed => feed.articles);
         const allArticles = _.flatten(articlesByFeed); // TODO: simplify? reduce?
-        const newArticles = allArticles.filter(
-          a => !stateArticles.some(sa => sa.title === a.title)
-        );
-        addArticles(newArticles);
+        addArticles(allArticles);
       });
     })
-    .then(() => setTimeout(updateFeeds(), settings.rssUpdateTimeout))
+    .then(setTimeout(updateFeeds, settings.rssUpdateTimeout))
     .catch(err => {
       console.error(err);
       throw err;

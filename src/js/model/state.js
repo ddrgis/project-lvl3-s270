@@ -32,18 +32,7 @@ export const addFeed = ({ title, description, url }) => {
 
 export const getArticles = () => state.articles;
 export const addArticles = articles => {
-  const oldArticles = state.articles;
-  const newArticles = articles.filter(
-    article => !oldArticles.some(a => a.title === article.title)
-  );
-
-  state.articles = [...oldArticles, ...newArticles];
-
-  if (oldArticles.length === 0) {
-    renders.renderArticlesList(getArticles());
-  } else {
-    renders.renderNewArticles(newArticles);
-  }
+  state.articles = [...state.articles, ...articles];
 };
 
 export const getValidationError = () => state.ui.validationError;
@@ -65,6 +54,6 @@ watch(state, 'feeds', () => {
     renders.showContentContainer();
   }
 });
-// TODO: watch(state.articles)
+watch(state, 'articles', () => renders.renderArticlesListNew(getArticles()));
 watch(state.ui, 'validationError', () => renders.renderValidationError(getValidationError()));
 watch(state.ui, 'isRSSLoading', () => renders.toggleRSSLoading(isRSSLoading()));
