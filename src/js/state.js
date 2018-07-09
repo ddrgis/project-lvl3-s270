@@ -35,8 +35,9 @@ export const getArticles = () => state.articles;
 
 export const addArticles = articles => {
   const oldArticles = state.articles;
-  const newArticles = articles.filter(article =>
-    !oldArticles.some(a => a.title === article.title));
+  const newArticles = articles.filter(
+    article => !oldArticles.some(a => a.title === article.title)
+  );
 
   state.articles = [...oldArticles, ...newArticles];
 
@@ -65,8 +66,4 @@ export const toggleRSSLoading = () => {
 export const showContentContainer = () => {
   state.ui.isHiddenRSSContent = false;
   renders.showContentContainer();
-};
-
-export const setUpdateTimer = () => {
-  state.app.isUpdateTimerSetted = true;
 };

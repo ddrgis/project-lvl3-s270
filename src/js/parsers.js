@@ -34,4 +34,8 @@ export const parseRSS = (rss, url) => {
   };
 };
 
-export default parseRSS;
+export const parseDocument = (string, format = 'application/xml') => {
+  const parser = new DOMParser();
+  const dom = parser.parseFromString(string, format);
+  return dom;
+};

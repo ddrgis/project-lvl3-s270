@@ -6,14 +6,14 @@ import {
   getState,
   setValidationError,
   toggleRSSLoading,
-  setUpdateTimer,
   addFeed,
   addArticles,
   getArticles,
   showContentContainer
 } from './state';
-import { parseRSS } from './parsers';
+import { parseDocument, parseRSS } from './parsers';
 import { validateURL } from './validator';
+import settings from '../settings';
 
 const handleError = err => {
   console.error(err);
@@ -26,11 +26,10 @@ const handleError = err => {
 
 export const requestRSS = url =>
   axios
-    .get(`https://cors-anywhere.herokuapp.com/${normalize(url)}`)
-    .then(response => {
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(response.data, 'application/xml');
-      const rss = dom.querySelector('rss');
+    .get(`${settings.corsProxyURL}${normalize(url)}`)
+    .then(response => parseDocument(response.data, 'application/xml'))
+    .then(document => {
+      const rss = document.querySelector('rss');
       if (!rss || rss.length === 0) {
         throw new Error(`There is no RSS feed at ${url}`);
       }
@@ -66,46 +65,47 @@ const updateFeeds = () => {
     });
 };
 
-const startApplication = ({ rssUpdateInterval }) => {
+const handleButtonClick = rssURLInput => e => {
+  e.preventDefault();
+  const url = rssURLInput.val();
+  const state = getState();
+  const isValidURL = validateURL(url);
+  if (!isValidURL) {
+    return;
+  }
+  toggleRSSLoading();
+  requestRSS(url)
+    .then(response => parseRSS(response, url))
+    .then(({ feed, articles }) => {
+      addFeed(feed);
+      addArticles(articles);
+      if (state.ui.isHiddenRSSContent) {
+        showContentContainer();
+      }
+    })
+    .then(() => {
+      toggleRSSLoading();
+      setTimeout(updateFeeds(), settings.rssUpdateTimeout);
+    })
+    .catch(err => {
+      toggleRSSLoading();
+      handleError(err);
+      setTimeout(updateFeeds(), settings.rssUpdateTimeout);
+    });
+};
+
+const setUpEventHandlers = () => {
   const rssSubmitButton = $('#btn-submit');
   const rssURLInput = $('#input-rss-url');
 
-  rssSubmitButton.on('click', e => {
-    e.preventDefault();
-    const url = rssURLInput.val();
-    const state = getState();
-
-    const isValidURL = validateURL(url);
-    if (!isValidURL) {
-      return;
-    }
-
-    toggleRSSLoading();
-    requestRSS(url)
-      .then(response => parseRSS(response, url))
-      .then(({ feed, articles }) => {
-        addFeed(feed);
-        addArticles(articles);
-        if (state.ui.isHiddenRSSContent) {
-          showContentContainer();
-        }
-      })
-      .then(() => {
-        if (!state.app.isUpdateTimerSetted) {
-          setInterval(() => updateFeeds(), rssUpdateInterval);
-          setUpdateTimer();
-        }
-        toggleRSSLoading();
-      })
-      .catch(err => {
-        toggleRSSLoading();
-        handleError(err);
-      });
-  });
-
+  rssSubmitButton.on('click', handleButtonClick(rssURLInput));
   rssURLInput.on('keyup', e => {
     validateURL(e.target.value);
   });
+};
+
+const startApplication = () => {
+  setUpEventHandlers();
 };
 
 export default startApplication;
