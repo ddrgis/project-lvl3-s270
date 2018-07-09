@@ -13,7 +13,7 @@ import {
   showContentContainer
 } from './state';
 import { parseRSS } from './parsers';
-import validateURL from './validator';
+import { validateURL } from './validator';
 
 const handleError = err => {
   console.error(err);
