@@ -22,7 +22,7 @@ export const renderRSSModal = ({ title, description, link }) => {
   $('#rss-modal').modal('show');
 };
 
-export const renderArticlesList = articles => {
+export const renderArticlesList = articles => { // TODO: sorting
   const container = $('#articles-list');
   const articlesItems = articles.map(a => {
     const link = document.createElement('a');
@@ -51,6 +51,14 @@ export const renderArticlesList = articles => {
 
 export const renderValidationError = error => {
   const container = $('#rss-input-error');
+  const rssURLInput = $('#input-rss-url');
+
+  if (error) {
+    rssURLInput.addClass('border border-danger');
+  } else {
+    rssURLInput.removeClass('border border-danger');
+  }
+
   container.html(error);
 };
 

@@ -1,30 +1,27 @@
-import $ from 'jquery';
-
 function parseFeed(rss) {
-  const title = rss.find('channel>title');
-  const titleText = title ? title.text() : '';
-  const description = rss.find('channel>description');
-  const descriptionText = description ? description.text() : '';
+  const title = rss.querySelector('channel>title');
+  const titleText = title ? title.textContent : '';
+  const description = rss.querySelector('channel>description');
+  const descriptionText = description ? description.textContent : '';
   return { titleText, descriptionText };
 }
 
 function parseArticles(items) {
-  return items.map(index => {
-    const jItem = $(items[index]);
-    const articleTitle = jItem.find('title');
-    const link = jItem.find('link');
-    const articleDescription = jItem.find('description');
+  return items.map(item => {
+    const articleTitle = item.querySelector('title');
+    const link = item.querySelector('link');
+    const articleDescription = item.querySelector('description');
     return {
-      title: articleTitle ? articleTitle.text() : '',
-      link: link ? link.text() : '',
-      description: articleDescription ? articleDescription.text() : ''
+      title: articleTitle ? articleTitle.textContent : '',
+      link: link ? link.textContent : '',
+      description: articleDescription ? articleDescription.textContent : ''
     };
   });
 }
 
 export const parseRSS = (rss, url) => {
   const { titleText, descriptionText } = parseFeed(rss);
-  const items = rss.find('item');
+  const items = [...rss.querySelectorAll('item')];
   const articles = parseArticles(items);
 
   return {

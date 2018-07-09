@@ -16,7 +16,7 @@ import {
 import { parseRSS } from './parsers';
 
 const handleError = err => {
-  console.log(err);
+  console.error(err);
   if (err.response && err.response.status === 404) {
     setValidationError('Please enter existed URL');
   } else {
@@ -30,14 +30,14 @@ export const requestRSS = url =>
     .then(response => {
       const parser = new DOMParser();
       const dom = parser.parseFromString(response.data, 'application/xml');
-      const rss = $(dom).find('rss');
+      const rss = dom.querySelector('rss');
       if (rss.length === 0) {
         throw new Error(`There is no RSS feed at ${url}`);
       }
       return rss;
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       throw err;
     });
 
@@ -48,8 +48,8 @@ const updateFeeds = () => {
       Promise.all(response.map(rss => parseRSS(rss)))
         .then(feeds => {
           const stateArticles = getArticles();
-          const articlesByFeed = feeds.map(feed => feed.articles.toArray());
-          const allArticles = _.flatten(articlesByFeed);
+          const articlesByFeed = feeds.map(feed => feed.articles);
+          const allArticles = _.flatten(articlesByFeed); // TODO: optimise
           const newArticles = allArticles.filter(
             a => !stateArticles.some(sa => sa.title === a.title)
           );
@@ -61,7 +61,7 @@ const updateFeeds = () => {
         });
     })
     .catch(err => {
-      console.log(err);
+      console.error(err);
       throw err;
     });
 };
@@ -73,6 +73,7 @@ const startApplication = ({ rssUpdateInterval }) => {
   rssSubmitButton.on('click', e => {
     e.preventDefault();
     const url = rssURLInput.val();
+    const state = getState();
 
     if (!isValidURL(url)) {
       setValidationError('This URL is already parsed'); // TODO: call new validate method instead of isValidURL. There are another errors could be here!
@@ -85,10 +86,12 @@ const startApplication = ({ rssUpdateInterval }) => {
       .then(({ feed, articles }) => {
         addFeed(feed);
         addArticles(articles);
-        showContentContainer();
+        if (state.ui.isHiddenRSSContent) {
+          showContentContainer();
+        }
       })
       .then(() => {
-        if (!getState().app.isUpdateTimerSetted) {
+        if (!state.app.isUpdateTimerSetted) {
           setInterval(() => updateFeeds(), rssUpdateInterval);
           setUpdateTimer();
         }
@@ -102,12 +105,10 @@ const startApplication = ({ rssUpdateInterval }) => {
 
   rssURLInput.on('keyup', e => {
     if (e.target.value && !isValidURL(e.target.value)) {
-      rssURLInput.addClass('border border-danger');
       setValidationError('Please enter valid URL');
       return;
     }
 
-    rssURLInput.removeClass('border border-danger');
     setValidationError('');
   });
 };
