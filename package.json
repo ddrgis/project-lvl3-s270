@@ -8,7 +8,7 @@
     "test": "jest",
     "babel-node": "babel-node",
     "eslint": "eslint",
-    "babel-build": "NODE_ENV=production babel src/js --out-dir dist --source-maps inline",
+    "babel-build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
     "deploy": "npm run webpack && surge --domain closed-song.surge.sh",
     "prepublishOnly": "npm run webpack"
   },

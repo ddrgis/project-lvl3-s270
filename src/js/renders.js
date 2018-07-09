@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 export const renderFeedList = feeds => {
-  const container = $('#feed-list-container');
+  const container = document.getElementById('feed-list-container');
   const feedItems = feeds.map(
     feed => `<div class="list-group-item">
       <h5>${feed.title}</h5>
@@ -9,7 +9,7 @@ export const renderFeedList = feeds => {
     </div>`
   );
   const content = `<ul class="list-group">${feedItems}</ul>`;
-  container.html(content);
+  container.innerHTML = content;
 };
 
 export const renderRSSModal = ({ title, description, link }) => {
