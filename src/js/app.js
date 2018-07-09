@@ -4,7 +4,6 @@ import axios from 'axios';
 import normalize from 'normalize-url';
 import {
   getState,
-  isValidURL,
   setValidationError,
   toggleRSSLoading,
   setUpdateTimer,
@@ -14,6 +13,7 @@ import {
   showContentContainer
 } from './state';
 import { parseRSS } from './parsers';
+import validateURL from './validator';
 
 const handleError = err => {
   console.error(err);
@@ -31,7 +31,7 @@ export const requestRSS = url =>
       const parser = new DOMParser();
       const dom = parser.parseFromString(response.data, 'application/xml');
       const rss = dom.querySelector('rss');
-      if (rss.length === 0) {
+      if (!rss || rss.length === 0) {
         throw new Error(`There is no RSS feed at ${url}`);
       }
       return rss;
@@ -49,7 +49,7 @@ const updateFeeds = () => {
         .then(feeds => {
           const stateArticles = getArticles();
           const articlesByFeed = feeds.map(feed => feed.articles);
-          const allArticles = _.flatten(articlesByFeed); // TODO: optimise
+          const allArticles = _.flatten(articlesByFeed); // TODO: simplify? reduce?
           const newArticles = allArticles.filter(
             a => !stateArticles.some(sa => sa.title === a.title)
           );
@@ -75,8 +75,8 @@ const startApplication = ({ rssUpdateInterval }) => {
     const url = rssURLInput.val();
     const state = getState();
 
-    if (!isValidURL(url)) {
-      setValidationError('This URL is already parsed'); // TODO: call new validate method instead of isValidURL. There are another errors could be here!
+    const isValidURL = validateURL(url);
+    if (!isValidURL) {
       return;
     }
 
@@ -104,12 +104,7 @@ const startApplication = ({ rssUpdateInterval }) => {
   });
 
   rssURLInput.on('keyup', e => {
-    if (e.target.value && !isValidURL(e.target.value)) {
-      setValidationError('Please enter valid URL');
-      return;
-    }
-
-    setValidationError('');
+    validateURL(e.target.value);
   });
 };
 

@@ -1,4 +1,3 @@
-import validator from 'validator';
 import * as renders from './renders';
 import { normilizeUrl } from './utils';
 
@@ -32,18 +31,6 @@ export const addFeed = ({ title, description, url }) => {
   renders.renderFeedList(getFeeds());
 };
 
-export const isValidURL = url => {
-  const isURL = validator.isURL(url);
-  if (!isURL) {
-    return false;
-  }
-  const normalizedUrl = normilizeUrl(url);
-  if (state.feeds.map(feed => feed.url).indexOf(normalizedUrl) > -1) {
-    return false;
-  }
-  return true;
-};
-
 export const getArticles = () => state.articles;
 
 export const addArticles = articles => {
@@ -54,6 +41,11 @@ export const addArticles = articles => {
 export const setValidationError = error => {
   state.ui.validationError = error;
   renders.renderValidationError(error);
+};
+
+export const resetValidationError = () => {
+  state.ui.validationError = '';
+  renders.renderValidationError('');
 };
 
 export const toggleRSSLoading = () => {
