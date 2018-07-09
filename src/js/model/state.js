@@ -1,5 +1,5 @@
-import * as renders from './renders';
-import { normilizeUrl } from './utils';
+import * as renders from '../view/renders';
+import { normilizeUrl } from '../utils';
 
 const state = {
   feeds: [],

@@ -10,7 +10,7 @@ import {
   addArticles,
   getArticles,
   showContentContainer
-} from './state';
+} from './model/state';
 import { parseDocument, parseRSS } from './parsers';
 import { validateURL } from './validator';
 import settings from '../settings';
@@ -53,10 +53,6 @@ const updateFeeds = () => {
             a => !stateArticles.some(sa => sa.title === a.title)
           );
           addArticles(newArticles);
-        })
-        .catch(err => {
-          console.error(err);
-          throw err;
         });
     })
     .catch(err => {

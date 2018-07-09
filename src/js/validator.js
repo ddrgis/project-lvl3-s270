@@ -1,6 +1,6 @@
 import validator from 'validator';
 import { normilizeUrl } from './utils';
-import { getState, setValidationError, resetValidationError } from './state';
+import { getState, setValidationError, resetValidationError } from './model/state';
 
 const isDuplicativeURL = url => {
   const normalizedUrl = normilizeUrl(url);
