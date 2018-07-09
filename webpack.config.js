@@ -18,7 +18,22 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins() {
+                // TODO: add postcss.config.js
+                return [require('precss'), require('autoprefixer')]; // eslint-disable-line 
+              }
+            }
+          },
+          {
+            loader: 'sass-loader'
+          }
+        ]
       }
     ]
   },
