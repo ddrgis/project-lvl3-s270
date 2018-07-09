@@ -1,5 +1,8 @@
+import WatchJS from 'melanke-watchjs';
 import * as renders from '../view/renders';
 import { normilizeUrl } from '../utils';
+
+const { watch } = WatchJS;
 
 const state = {
   feeds: [],
@@ -9,15 +12,13 @@ const state = {
   },
   ui: {
     validationError: '',
-    isRSSLoading: false,
-    isHiddenRSSContent: true
+    isRSSLoading: false
   }
 };
 
 export const getState = () => state;
 
 export const getFeeds = () => state.feeds;
-
 export const addFeed = ({ title, description, url }) => {
   state.feeds = [
     ...state.feeds,
@@ -27,12 +28,9 @@ export const addFeed = ({ title, description, url }) => {
       url: normilizeUrl(url)
     }
   ];
-
-  renders.renderFeedList(getFeeds());
 };
 
 export const getArticles = () => state.articles;
-
 export const addArticles = articles => {
   const oldArticles = state.articles;
   const newArticles = articles.filter(
@@ -48,22 +46,25 @@ export const addArticles = articles => {
   }
 };
 
+export const getValidationError = () => state.ui.validationError;
 export const setValidationError = error => {
   state.ui.validationError = error;
-  renders.renderValidationError(error);
 };
-
 export const resetValidationError = () => {
   state.ui.validationError = '';
-  renders.renderValidationError('');
 };
 
+export const isRSSLoading = () => state.ui.isRSSLoading;
 export const toggleRSSLoading = () => {
   state.ui.isRSSLoading = !state.ui.isRSSLoading;
-  renders.toggleRSSLoading(state.ui.isRSSLoading);
 };
 
-export const showContentContainer = () => {
-  state.ui.isHiddenRSSContent = false;
-  renders.showContentContainer();
-};
+watch(state, 'feeds', () => renders.renderFeedList(getFeeds()));
+watch(state, 'feeds', () => {
+  if (state.feeds.length > 0) {
+    renders.showContentContainer();
+  }
+});
+// TODO: watch(state.articles)
+watch(state.ui, 'validationError', () => renders.renderValidationError(getValidationError()));
+watch(state.ui, 'isRSSLoading', () => renders.toggleRSSLoading(isRSSLoading()));
