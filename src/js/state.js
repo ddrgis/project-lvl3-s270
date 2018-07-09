@@ -34,8 +34,17 @@ export const addFeed = ({ title, description, url }) => {
 export const getArticles = () => state.articles;
 
 export const addArticles = articles => {
-  state.articles = [...state.articles, ...articles];
-  renders.renderArticlesList(getArticles()); // TODO: rerender only new articles!
+  const oldArticles = state.articles;
+  const newArticles = articles.filter(article =>
+    !oldArticles.some(a => a.title === article.title));
+
+  state.articles = [...oldArticles, ...newArticles];
+
+  if (oldArticles.length === 0) {
+    renders.renderArticlesList(getArticles());
+  } else {
+    renders.renderNewArticles(newArticles);
+  }
 };
 
 export const setValidationError = error => {
