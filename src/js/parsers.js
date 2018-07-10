@@ -19,7 +19,15 @@ function parseArticles(items) {
   });
 }
 
-export const parseRSS = (rss, url) => {
+export const parseRSS = (data, url) => {
+  const parser = new DOMParser();
+  const document = parser.parseFromString(data, 'application/xml');
+
+  const rss = document.querySelector('rss');
+  if (!rss || rss.length === 0) {
+    throw new Error(`There is no RSS feed at ${url}`);
+  }
+
   const { titleText, descriptionText } = parseFeed(rss);
   const items = [...rss.querySelectorAll('item')];
   const articles = parseArticles(items);
