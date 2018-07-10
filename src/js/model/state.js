@@ -1,8 +1,4 @@
-import WatchJS from 'melanke-watchjs';
-import * as renders from '../view/renders';
 import { normilizeUrl } from '../utils';
-
-const { watch } = WatchJS;
 
 const state = {
   feeds: [],
@@ -52,13 +48,3 @@ export const isUpdateTimerSetted = () => state.app.isUpdateTimerSetted;
 export const toggleUpdateTimer = () => {
   state.app.isUpdateTimerSetted = !state.app.isUpdateTimerSetted;
 };
-
-watch(state, 'feeds', () => renders.renderFeedList(getFeeds()));
-watch(state, 'feeds', () => {
-  if (state.feeds.length > 0) {
-    renders.showContentContainer();
-  }
-});
-watch(state, 'articles', () => renders.renderArticlesListNew(getArticles()));
-watch(state.ui, 'validationError', () => renders.renderValidationError(getValidationError()));
-watch(state.ui, 'isRSSLoading', () => renders.toggleRSSLoading(isRSSLoading()));

@@ -2,25 +2,19 @@ import $ from 'jquery';
 import _ from 'lodash';
 import axios from 'axios';
 import normalize from 'normalize-url';
-import {
-  getState,
-  setValidationError,
-  setRSSLoading,
-  addFeed,
-  addArticles,
-  isUpdateTimerSetted,
-  toggleUpdateTimer
-} from './model/state';
+import WatchJS from 'melanke-watchjs';
+import * as state from './model/state';
 import { parseDocument, parseRSS } from './parsers';
 import { validateURL } from './validator';
 import settings from '../settings';
+import * as renders from './view/renders';
 
 const handleError = err => {
   console.error(err);
   if (err.response && err.response.status === 404) {
-    setValidationError('Please enter existed URL');
+    state.setValidationError('Please enter existed URL');
   } else {
-    setValidationError(err.message);
+    state.setValidationError(err.message);
   }
 };
 
@@ -41,13 +35,12 @@ export const requestRSS = url =>
     });
 
 const updateFeeds = () => {
-  const state = getState();
-  Promise.all(state.feeds.map(feed => requestRSS(feed.url)))
+  Promise.all(state.getState().feeds.map(feed => requestRSS(feed.url)))
     .then(response => {
       Promise.all(response.map(rss => parseRSS(rss))).then(feeds => {
         const articlesByFeed = feeds.map(feed => feed.articles);
         const allArticles = _.flatten(articlesByFeed); // TODO: simplify? reduce?
-        addArticles(allArticles);
+        state.addArticles(allArticles);
       });
     })
     .then(setTimeout(updateFeeds, settings.rssUpdateTimeout))
@@ -64,22 +57,22 @@ const handleButtonClick = rssURLInput => e => {
   if (!isValidURL) {
     return;
   }
-  setRSSLoading(true);
+  state.setRSSLoading(true);
   requestRSS(url)
     .then(response => parseRSS(response, url))
     .then(({ feed, articles }) => {
-      addFeed(feed);
-      addArticles(articles);
+      state.addFeed(feed);
+      state.addArticles(articles);
     })
     .then(() => {
-      setRSSLoading(false);
-      if (!isUpdateTimerSetted()) {
+      state.setRSSLoading(false);
+      if (!state.isUpdateTimerSetted()) {
         setTimeout(updateFeeds, settings.rssUpdateTimeout);
-        toggleUpdateTimer();
+        state.toggleUpdateTimer();
       }
     })
     .catch(err => {
-      setRSSLoading(false);
+      state.setRSSLoading(false);
       handleError(err);
     });
 };
@@ -94,8 +87,29 @@ const setUpEventHandlers = () => {
   });
 };
 
+const setModelChangeHandlers = () => {
+  const appState = state.getState();
+  const { watch } = WatchJS;
+  watch(appState, 'feeds', () => renders.renderFeedList(state.getFeeds()));
+  watch(appState, 'feeds', () => {
+    if (appState.feeds.length > 0) {
+      renders.showContentContainer();
+    }
+  });
+  watch(appState, 'articles', () =>
+    renders.renderArticlesListNew(state.getArticles())
+  );
+  watch(appState.ui, 'validationError', () =>
+    renders.renderValidationError(state.getValidationError())
+  );
+  watch(appState.ui, 'isRSSLoading', () =>
+    renders.toggleRSSLoading(state.isRSSLoading())
+  );
+};
+
 const startApplication = () => {
   setUpEventHandlers();
+  setModelChangeHandlers();
 };
 
 export default startApplication;

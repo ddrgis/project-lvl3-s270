@@ -3,7 +3,8 @@ import $ from 'jquery';
 export const renderFeedList = feeds => {
   const container = document.getElementById('feed-list-container');
   const feedItems = feeds.map(
-    feed => `<div class="list-group-item">
+    feed =>
+      `<div class="list-group-item">
       <h5>${feed.title}</h5>
       <p>${feed.description}</p>
     </div>`
